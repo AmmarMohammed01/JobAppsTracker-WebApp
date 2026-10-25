@@ -7,15 +7,17 @@ from jobapps_flask.auth import login_required
 from jobapps_flask.db import get_db
 
 
+bp = Blueprint('job', __name__)
+
+
 @bp.route('/')
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        'SELECT job_id, user_id, company_id, platform_id, job_title, resume_id'
+        ' FROM job'
     ).fetchall()
-    return render_template('job/index.html', posts=posts)
+    return render_template('job/index.html')
 
 
 @bp.route('/create', methods=('GET', 'POST'))

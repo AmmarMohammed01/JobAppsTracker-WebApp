@@ -27,7 +27,7 @@ def init_db():
     db = get_db()
 
     # open_resource() opens file relative to flaskr package
-    with current_app.open_resource('schema.sql') as f:
+    with current_app.open_resource('jobapps_sqlite.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
 
