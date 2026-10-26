@@ -1,9 +1,39 @@
-<!DOCTYPE html>
-<html>
-    <body>
-        <title>JobApps - Job</title>        
-    </body>
-    <script>
+{% extends 'base.html' %}
 
-    </script>
-</html>
+{% block header %}
+    <h1>{% block title %}Job View{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('job.create') }}">New</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Platform</th>
+            <th>Resume</th>
+            <th>Status</th>
+            <th>Website</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.username or '-'}}</td>
+            <td>{{ job.job_id or '-'}}</td>
+            <td>{{ job.company_name or '-'}}</td>
+            <td>{{ job.job_title or '-'}}</td>
+            <td>{{ job.platform_name or '-'}}</td>
+            <td>{{ job.resume_name or '-'}}</td>
+            <td>{{ job.status_description or '-'}}</td>
+            <td>{{ job.website_link or '-'}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
