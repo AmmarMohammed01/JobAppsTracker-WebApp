@@ -1,3 +1,5 @@
+# README
+## Tools Used
 [Deploying a Flask App to Production](https://flask.palletsprojects.com/en/stable/deploying/)
 
 - Python 3.15
@@ -15,6 +17,12 @@
         - View & MethodView classes
     - Routes
     - Single-Page Application
-        - 
+
 - SQLite3
     - [Insert stmt](https://sqlite.org/lang_insert.html)
+
+## Instructions
+```bash
+python -m venv .venv
+pip install -r requirements.txt
+```

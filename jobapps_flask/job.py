@@ -6,6 +6,7 @@ from werkzeug.exceptions import abort
 from jobapps_flask.auth import login_required
 from jobapps_flask.db import get_db
 
+from datetime import datetime
 
 bp = Blueprint('job', __name__)
 
@@ -25,12 +26,17 @@ def index():
             c.company_name,
             p.platform_name,
             j.job_title,
-            r.resume_name
+            r.resume_name,
+            s.status_description,
+            s.status_datetime,
+            w.website_link
         FROM job AS j
         LEFT JOIN user AS u ON u.id = j.user_id
         LEFT JOIN company AS c ON c.company_id = j.company_id
         LEFT JOIN platform AS p ON p.platform_id = j.platform_id
         LEFT JOIN resume AS r ON r.resume_id = j.resume_id
+        LEFT JOIN status AS s ON s.job_id = j.job_id
+        LEFT JOIN url AS w ON w.job_id = j.job_id
         ORDER BY j.job_id DESC
         '''
     ).fetchall()
@@ -47,7 +53,14 @@ def create():
         applied_time = request.form['applied_time']
         resume = request.form['resume']
         platform = request.form['platform']
+
+        # applied_time[10] = ' ' # string are immutable in python, this fails
+        # applied_time += ":00"
+        applied_time = datetime.fromisoformat(applied_time)
+        print(applied_time)  # 2024-09-30 18:49:00
+
         error = None
+
 
         if not title:
             error = 'Title is required.'
@@ -118,12 +131,28 @@ def create():
                 company_id = get_company[0]
                 resume_id = get_resume[0]
                 platform_id = get_platform[0]
-                db.execute(
+                cursor = db.execute(
                     'INSERT INTO job (user_id, company_id, job_title, resume_id, platform_id)'
                     ' VALUES (?, ?, ?, ?, ?)',
                     (g.user['id'], company_id, title, resume_id, platform_id)
                 )
+                job_id = cursor.lastrowid
                 db.commit()
+
+                db.execute(
+                    'INSERT INTO status (job_id, status_datetime, status_description)'
+                    'VALUES (?, ?, ?)',
+                    (job_id, applied_time, "Applied")
+                )
+                db.commit()
+
+                db.execute(
+                    'INSERT INTO url (job_id, website_link)'
+                    'VALUES (?, ?)',
+                    (job_id, link)
+                )
+                db.commit()
+
                 return redirect(url_for('job.index'))
 
     return render_template('job/add.html')
