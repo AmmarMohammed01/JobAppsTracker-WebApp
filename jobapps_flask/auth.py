@@ -64,7 +64,7 @@ def login():
             # session is a dict storing data across requests
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('job.index'))
 
         flash(error)
 
@@ -86,7 +86,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('index')) # home.index, now index, because endpoint='index' app rule in __init__.py
 
 
 # creating our own decorator to check user is logged in before using a flask view

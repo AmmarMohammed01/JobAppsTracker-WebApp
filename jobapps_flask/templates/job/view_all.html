@@ -11,7 +11,7 @@
 <table>
     <thead>
         <tr>
-            <th>User</th>
+            <!-- <th>User</th> -->
             <th>Company</th>
             <th>Job Title</th>
             <th>Status Type</th>
@@ -22,7 +22,7 @@
     <tbody>
         {% for job in jobs %}
         <tr>
-            <td>{{ job.username or '-'}}</td>
+            <!-- <td> job.username or '-'</td> -->
             <td>{{ job.company_name or '-'}}</td>
             <td>{{ job.job_title or '-'}}</td>
             <td>{{ job.status_description or '-'}}</td>

@@ -8,7 +8,7 @@ from jobapps_flask.db import get_db
 
 from datetime import datetime
 
-bp = Blueprint('job', __name__)
+bp = Blueprint('job', __name__, url_prefix='/jobs')
 
 
 # should return jobs only for logged in user soon
@@ -35,10 +35,12 @@ def index():
         LEFT JOIN resume AS r ON r.resume_id = j.resume_id
         LEFT JOIN status AS s ON s.job_id = j.job_id
         LEFT JOIN url AS w ON w.job_id = j.job_id
+        WHERE u.id = ?
         ORDER BY j.job_id DESC
-        '''
+        ''',
+        (g.user['id'],)
     ).fetchall()
-    return render_template('job/index.html', jobs=jobs)
+    return render_template('job/view_all.html', jobs=jobs)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -204,6 +206,8 @@ def view(id):
         ''',
         (id,)
     ).fetchall()
+
+    # add KeyError, if job index that doesn't exist is called
 
     return render_template('job/view.html', job=job, statuses=statuses, links=links)
 
