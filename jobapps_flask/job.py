@@ -11,13 +11,11 @@ from datetime import datetime
 bp = Blueprint('job', __name__)
 
 
+# should return jobs only for logged in user soon
 @bp.route('/')
 def index():
     db = get_db()
-    '''
-    'SELECT job_id, user_id, company_id, platform_id, job_title, resume_id'
-    ' FROM job'
-    '''
+
     jobs = db.execute(
         '''
         SELECT
@@ -155,4 +153,92 @@ def create():
 
                 return redirect(url_for('job.index'))
 
-    return render_template('job/add.html')
+    return render_template('job/create.html')
+
+def get_job(id):
+    job = get_db().execute(
+        '''
+        SELECT
+            j.job_title,
+            c.company_name,
+            p.platform_name,
+            r.resume_name
+        FROM job AS j
+        LEFT JOIN user AS u ON u.id = j.user_id
+        LEFT JOIN company AS c ON c.company_id = j.company_id
+        LEFT JOIN platform AS p ON p.platform_id = j.platform_id
+        LEFT JOIN resume AS r ON r.resume_id = j.resume_id
+        WHERE job_id = ?
+        ORDER BY j.job_id DESC
+        ''',
+        (id,)
+    ).fetchone()
+
+    if job is None:
+        abort(404, f"Job id {id} doesn't exist.")
+
+    return job
+
+
+@bp.route('/<int:id>/view', methods=('GET',))
+@login_required
+def view(id):
+    job = get_job(id)
+
+    db = get_db()
+    statuses = db.execute(
+        '''
+        SELECT status_description, status_datetime
+        FROM status
+        WHERE job_id = ?
+        ORDER BY status_datetime DESC
+        ''',
+        (id,)
+    ).fetchall()
+
+    links = db.execute(
+        '''
+        SELECT website_link
+        FROM url
+        WHERE job_id = ?
+        ''',
+        (id,)
+    ).fetchall()
+
+    return render_template('job/view.html', job=job, statuses=statuses, links=links)
+
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    job = get_job(id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'UPDATE job SET title = ?, body = ?'
+                ' WHERE id = ?',
+                (title, body, id)
+            )
+            db.commit()
+            return redirect(url_for('job.index'))
+
+    return render_template('job/update.html', job=job)
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    get_job(id)
+    db = get_db()
+    db.execute('DELETE FROM job WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('job.index'))

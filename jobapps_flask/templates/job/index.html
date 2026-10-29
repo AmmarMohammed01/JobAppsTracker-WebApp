@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Job View{% endblock %}</h1>
+    <h1>{% block title %}Jobs List{% endblock %}</h1>
     {% if g.user %}
         <a class="action" href="{{ url_for('job.create') }}">New</a>
     {% endif %}
@@ -12,28 +12,24 @@
     <thead>
         <tr>
             <th>User</th>
-            <th>ID</th>
             <th>Company</th>
             <th>Job Title</th>
-            <th>Platform</th>
-            <th>Resume</th>
             <th>Status Type</th>
             <th>Status Time</th>
-            <th>Website</th>
+            <th>VIEW</th>
         </tr>
     </thead>
     <tbody>
         {% for job in jobs %}
         <tr>
             <td>{{ job.username or '-'}}</td>
-            <td>{{ job.job_id or '-'}}</td>
             <td>{{ job.company_name or '-'}}</td>
             <td>{{ job.job_title or '-'}}</td>
-            <td>{{ job.platform_name or '-'}}</td>
-            <td>{{ job.resume_name or '-'}}</td>
             <td>{{ job.status_description or '-'}}</td>
             <td>{{ job.status_datetime or '-'}}</td>
-            <td>{{ job.website_link or '-'}}</td>
+            {% if g.user['username'] == job['username'] %}
+            <td><a class="action" href="{{ url_for('job.view', id=job['job_id']) }}">View</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

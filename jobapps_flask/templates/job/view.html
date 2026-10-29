@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Job View{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('job.create') }}">New</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>Job Title: {{ job.job_title or '-'}}</h1>
+<h2>Company: {{ job.company_name or '-'}}</h2>
+<p>Resume Used: {{ job.resume_name or '-'}}</p>
+<p>Platform Applied On: {{ job.platform_name or '-'}}</p>
+
+<p>Statuses</p>
+<table>
+    <thead>
+        <th>Status Type</th>
+        <th>Status Time</th>
+    </thead>
+    <tbody>
+        <!-- jinja works even when commented out -->
+        <!-- {% if statuses %} -->
+        {% for status in statuses %}
+        <td>{{ status.status_description or '-'}}</td>
+        <td>{{ status.status_datetime or '-'}}</td>
+        {% endfor %}
+        <!-- {% else %} -->
+        <td>N/A</td>
+        <td>N/A</td>
+        <!-- {% endif%} -->
+    </tbody>
+</table>
+<button>Add</button>
+<!-- Need to program status adding functionality for button -->
+
+<p>Website URLs</p>
+{% if links%}
+    {% for link in links %}
+    <a href="{{ link.website_link }}" target="_blank" rel="noopener noreferrer">{{ link.website_link or '-'}}</a>
+    {% endfor %}
+{% else %}
+    <p>No links found.</p>
+{% endif%}
+
+{% endblock %}
