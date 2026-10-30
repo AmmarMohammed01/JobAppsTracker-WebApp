@@ -17,6 +17,7 @@
         - View & MethodView classes
     - Routes
     - Single-Page Application
+    - Requests
 
 - SQLite3
     - [Insert stmt](https://sqlite.org/lang_insert.html)

@@ -8,10 +8,11 @@
 {% endblock %}
 
 {% block content %}
-<h1>Job Title: {{ job.job_title or '-'}}</h1>
-<h2>Company: {{ job.company_name or '-'}}</h2>
-<p>Resume Used: {{ job.resume_name or '-'}}</p>
-<p>Platform Applied On: {{ job.platform_name or '-'}}</p>
+<a href="{{ url_for('job.index') }}">Back to Jobs List</a>
+<h1>Job Title: {{ j.job_title or '-'}}</h1>
+<h2>Company: {{ j.company_name or '-'}}</h2>
+<p>Resume Used: {{ j.resume_name or '-'}}</p>
+<p>Platform Applied On: {{ j.platform_name or '-'}}</p>
 
 <p>Statuses</p>
 <table>
@@ -35,19 +36,43 @@
     </tbody>
 {% endif%}
 </table>
-<button>Add Status</button>
-<!-- Need to program status adding functionality for button -->
+
+<form action="{{ url_for('job.add_status', id=j.job_id)}}" method="post">
+    <select name="status_description" id="">
+        <option value="Applied">Applied</option>
+        <option value="Recruiter Screen">Recruiter Screen</option>
+        <option value="Assessment">Assessment</option>
+        <option value="Interview Scheduled">Interview Scheduled</option>
+        <option value="Interview In-Person">Interview: In-Person</option>
+        <option value="Interview Virtual">Interview: Virtual</option>
+        <option value="References Background Check">References / Background Check</option>
+        <option value="Offer Received">Offer Received</option>
+        <option value="Offer Accepted">Offer Accepted</option>
+        <option value="Withdrawn">Withdrawn</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Closed">Closed / No Response</option>
+    </select>
+    <input type="datetime-local" name="status_datetime" id="">
+    <button>Add Status</button>
+    <!-- Need to program status adding functionality for button -->
+</form>
 
 <p>Website URLs</p>
 {% if links%}
     {% for link in links %}
-    <a href="{{ link.website_link }}" target="_blank" rel="noopener noreferrer">{{ link.website_link or '-'}}</a>
+    <div>
+        <a href="{{ link.website_link }}" target="_blank" rel="noopener noreferrer">{{ link.website_link or '-'}}</a>
+    </div>
     {% endfor %}
 {% else %}
     <p>No links found.</p>
 {% endif%}
 
-<button>Add URL</button>
-<!-- Need to program status adding functionality for button -->
+<form action="{{ url_for('job.add_url', id=j.job_id) }}" method="post">
+    <input type="text" placeholder="https://www.example.org" name="website_link">
+    <button>Add URL</button>
+    <!-- Need to program status adding functionality for button -->
+    <!-- Check in backend if user actually sent a link, even if checks are in front-end, user can modify .js files -->
+</form>
 
 {% endblock %}

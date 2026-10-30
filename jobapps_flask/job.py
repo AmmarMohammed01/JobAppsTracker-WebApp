@@ -162,6 +162,7 @@ def get_job(id):
     job = get_db().execute(
         '''
         SELECT
+            j.job_id,
             j.job_title,
             c.company_name,
             p.platform_name,
@@ -186,7 +187,7 @@ def get_job(id):
 @bp.route('/<int:id>/view', methods=('GET',))
 @login_required
 def view(id):
-    job = get_job(id)
+    j = get_job(id)
 
     db = get_db()
     statuses = db.execute(
@@ -210,34 +211,54 @@ def view(id):
 
     # add KeyError, if job index that doesn't exist is called
 
-    return render_template('job/view.html', job=job, statuses=statuses, links=links)
+    return render_template('job/view.html', j=j, statuses=statuses, links=links)
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/<int:id>/status/add', methods=('POST',))
 @login_required
-def update(id):
-    job = get_job(id)
+def add_status(id):
+    # how to get these variables? These are user inputs from frontend
+    # I should have input box, perhaps in form tag, to obtain request.
+    if request.method == "POST":
+        status_datetime = request.form['status_datetime']
+        status_description = request.form['status_description']
 
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-        error = None
+        status_datetime = datetime.fromisoformat(status_datetime)
 
-        if not title:
-            error = 'Title is required.'
+        print(id)
+        # print(request.form['id'])
+        print(status_description)
+        print(status_datetime)
 
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'UPDATE job SET title = ?, body = ?'
-                ' WHERE id = ?',
-                (title, body, id)
-            )
-            db.commit()
-            return redirect(url_for('job.index'))
+        # check if correct user is calling endpoint
+        db = get_db()
+        db.execute(
+            '''
+            INSERT INTO status (job_id, status_datetime, status_description)
+            VALUES (?, ?, ?)
+            ''',
+            (id, status_datetime, status_description)
+        )
+        db.commit()
+        return redirect(url_for('job.view', id=id))
 
-    return render_template('job/update.html', job=job)
+
+@bp.route('/<int:id>/url/add', methods=('POST',))
+@login_required
+def add_url(id):
+    if request.method == "POST":
+        website_link = request.form['website_link']
+
+        db = get_db()
+        db.execute(
+            '''
+            INSERT INTO url (job_id, website_link)
+            VALUES (?, ?)
+            ''',
+            (id, website_link)
+        )
+        db.commit()
+        return redirect(url_for('job.view', id=id))
+
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
