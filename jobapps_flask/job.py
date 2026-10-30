@@ -26,7 +26,7 @@ def index():
             j.job_title,
             r.resume_name,
             s.status_description,
-            s.status_datetime,
+            MAX(s.status_datetime) as latest_status_time,
             w.website_link
         FROM job AS j
         LEFT JOIN user AS u ON u.id = j.user_id
@@ -36,10 +36,11 @@ def index():
         LEFT JOIN status AS s ON s.job_id = j.job_id
         LEFT JOIN url AS w ON w.job_id = j.job_id
         WHERE u.id = ?
-        ORDER BY j.job_id DESC
+        GROUP BY j.job_id
+        ORDER BY latest_status_time DESC
         ''',
         (g.user['id'],)
-    ).fetchall()
+    ).fetchall() # could have also done ORDER BY MAX(s.status_datetime)
     return render_template('job/view_all.html', jobs=jobs)
 
 

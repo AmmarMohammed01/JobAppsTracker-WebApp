@@ -26,7 +26,7 @@
             <td>{{ job.company_name or '-'}}</td>
             <td>{{ job.job_title or '-'}}</td>
             <td>{{ job.status_description or '-'}}</td>
-            <td>{{ job.status_datetime or '-'}}</td>
+            <td>{{ job.latest_status_time or '-'}}</td>
             {% if g.user['username'] == job['username'] %}
             <td><a class="action" href="{{ url_for('job.view', id=job['job_id']) }}">View</a></td>
             {% endif %}
