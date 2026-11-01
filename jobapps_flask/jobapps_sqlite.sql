@@ -26,9 +26,11 @@ CREATE TABLE platform (
 
 CREATE TABLE resume (
   resume_id   INTEGER PRIMARY KEY AUTOINCREMENT,
-  resume_name TEXT UNIQUE COLLATE NOCASE,
-  resume_link TEXT UNIQUE COLLATE NOCASE
+  resume_name TEXT COLLATE NOCASE,
+  user_id     INTEGER REFERENCES user (id) ON DELETE CASCADE,
+  UNIQUE (user_id, resume_name)
 );
+CREATE INDEX idx_resume_user ON resume (user_id);
 
 CREATE TABLE job (
   job_id      INTEGER PRIMARY KEY AUTOINCREMENT,

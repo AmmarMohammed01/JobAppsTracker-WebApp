@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+<html>
 <title>JobApps - {% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='my_style.css') }}">
 <nav>
   <h1>JobApps</h1>
   <ul>
     {% if g.user %}
       <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+      <li><button><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
     {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+      <li><button><a href="{{ url_for('auth.register') }}">Register</a></button>
+      <li><button><a href="{{ url_for('auth.login') }}">Log In</a></button>
     {% endif %}
   </ul>
 </nav>
@@ -22,3 +23,4 @@
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
+</html>

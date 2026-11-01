@@ -100,10 +100,10 @@ def create():
                 print("Resume not found.")
                 cursor = db.execute(
                     '''
-                    INSERT INTO resume (resume_name)
-                    VALUES (?)
+                    INSERT INTO resume (resume_name, user_id)
+                    VALUES (?, ?)
                     ''',
-                    (resume,)
+                    (resume, g.user['id'])
                 )
                 resume_id = cursor.lastrowid
                 db.commit()

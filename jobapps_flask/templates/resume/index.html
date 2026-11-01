@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Resume List{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('job.create') }}">New</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<table>
+    <caption>Table: Resume List</caption>
+    <thead>
+        <tr>
+            <th>Resume Name</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resume in resumes %}
+        <tr>
+            <td>{{ resume.resume_name or '-'}}</td>
+            {% if g.user['username'] == job['username'] %}
+            <td><a class="action" href="{{ url_for('job.view', id=job['job_id']) }}">View</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
