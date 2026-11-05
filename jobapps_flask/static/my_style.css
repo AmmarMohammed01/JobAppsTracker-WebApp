@@ -4,6 +4,13 @@ html {
     margin: 0;
 
     height: 100%;
+    /* background: radial-gradient( */
+        /* #ffffff, */
+        /* #C4C6E7 */
+        /* #aeaeae 90% */
+    /* ); */
+
+    background: linear-gradient(#87ddff, #aaaaff);
 }
 
 nav {
@@ -19,6 +26,7 @@ nav {
     border-bottom-width: 5px; */
     
     box-shadow: 3px 4px 5px rgb(0,0,0);
+    background-color: white;
 }
 
 nav h1 {
@@ -118,11 +126,11 @@ td {
 }
 
 .create-form-content {
-    background-color: #C4C6E7;
+    background-color: azure;
     padding: 2rem;
 
-    border-style: none;
-    border-radius: 20px;
+    border-style: solid;
+    border-radius: 30px;
 
     display: flex;
     flex-direction: column;
@@ -155,6 +163,7 @@ input[type=submit] {
 .job-info-content {
     display: block;
     border-style: solid;
+    border-radius: 30px;
     background-color: azure;
     padding: 20px;
 }
