@@ -1,78 +1,76 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Job View{% endblock %}</h1>
-    {% if g.user %}
-        <a class="action" href="{{ url_for('job.create') }}">New</a>
-    {% endif %}
-{% endblock %}
+{% block title %}Job View{% endblock %}
 
 {% block content %}
 <a href="{{ url_for('job.index') }}">Back to Jobs List</a>
-<h1>Job Title: {{ j.job_title or '-'}}</h1>
-<h2>Company: {{ j.company_name or '-'}}</h2>
-<p>Resume Used: {{ j.resume_name or '-'}}</p>
-<p>Platform Applied On: {{ j.platform_name or '-'}}</p>
+<div class="job-info-content">
+    <div class="job-info-title">{{ j.job_title or '-'}} &#183;</div>
+    <div class="job-info-company">{{ j.company_name or '-'}}</div>
+    
+    <p class="job-info-extrainfo">Resume Used: {{ j.resume_name or '-'}}</p>
+    <p class="job-info-extrainfo">Platform Applied On: {{ j.platform_name or '-'}}</p>
 
-<p>Statuses</p>
-<table>
-    <thead>
-        <th>Status Type</th>
-        <th>Status Time</th>
-    </thead>
+    <table>
+        <thead>
+            <th>Status Type</th>
+            <th>Status Time</th>
+        </thead>
 
-{% if statuses %}
-    {% for status in statuses %}
-    <tbody>
-        <!-- jinja works even when commented out -->
-        <td>{{ status.status_description or '-'}}</td>
-        <td>{{ status.status_datetime or '-'}}</td>
-    </tbody>
-    {% endfor %}
-{% else %}
-    <tbody>
-        <td>N/A</td>
-        <td>N/A</td>
-    </tbody>
-{% endif%}
-</table>
+        <tbody>
+        {% if statuses %}
+            {% for status in statuses %}
+            <!-- jinja works even when commented out -->
+            <tr>
+                <td>{{ status.status_description or '-'}}</td>
+                <td>{{ status.status_datetime or '-'}}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>N/A</td>
+                <td>N/A</td>
+            </tr>
+        {% endif%}
+        </tbody>
+    </table>
 
-<form action="{{ url_for('job.add_status', id=j.job_id)}}" method="post">
-    <select name="status_description" id="">
-        <option value="Applied">Applied</option>
-        <option value="Recruiter Screen">Recruiter Screen</option>
-        <option value="Assessment">Assessment</option>
-        <option value="Interview Scheduled">Interview Scheduled</option>
-        <option value="Interview In-Person">Interview: In-Person</option>
-        <option value="Interview Virtual">Interview: Virtual</option>
-        <option value="References Background Check">References / Background Check</option>
-        <option value="Offer Received">Offer Received</option>
-        <option value="Offer Accepted">Offer Accepted</option>
-        <option value="Withdrawn">Withdrawn</option>
-        <option value="Rejected">Rejected</option>
-        <option value="Closed">Closed / No Response</option>
-    </select>
-    <input type="datetime-local" name="status_datetime" id="">
-    <button>Add Status</button>
-    <!-- Need to program status adding functionality for button -->
-</form>
+    <form action="{{ url_for('job.add_status', id=j.job_id)}}" method="post">
+        <select name="status_description" id="">
+            <option value="Applied">Applied</option>
+            <option value="Recruiter Screen">Recruiter Screen</option>
+            <option value="Assessment">Assessment</option>
+            <option value="Interview Scheduled">Interview Scheduled</option>
+            <option value="Interview In-Person">Interview: In-Person</option>
+            <option value="Interview Virtual">Interview: Virtual</option>
+            <option value="References Background Check">References / Background Check</option>
+            <option value="Offer Received">Offer Received</option>
+            <option value="Offer Accepted">Offer Accepted</option>
+            <option value="Withdrawn">Withdrawn</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Closed">Closed / No Response</option>
+        </select>
+        <input type="datetime-local" name="status_datetime" id="">
+        <button>Add Status</button>
+        <!-- Need to program status adding functionality for button -->
+    </form>
 
-<p>Website URLs</p>
-{% if links%}
-    {% for link in links %}
-    <div>
-        <a href="{{ link.website_link }}" target="_blank" rel="noopener noreferrer">{{ link.website_link or '-'}}</a>
-    </div>
-    {% endfor %}
-{% else %}
-    <p>No links found.</p>
-{% endif%}
+    <p>Website URLs</p>
+    {% if links%}
+        {% for link in links %}
+        <div>
+            <a href="{{ link.website_link }}" target="_blank" rel="noopener noreferrer">{{ link.website_link or '-'}}</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No links found.</p>
+    {% endif%}
 
-<form action="{{ url_for('job.add_url', id=j.job_id) }}" method="post">
-    <input type="text" placeholder="https://www.example.org" name="website_link">
-    <button>Add URL</button>
-    <!-- Need to program status adding functionality for button -->
-    <!-- Check in backend if user actually sent a link, even if checks are in front-end, user can modify .js files -->
-</form>
-
+    <form action="{{ url_for('job.add_url', id=j.job_id) }}" method="post">
+        <input type="text" placeholder="https://www.example.org" name="website_link">
+        <button>Add URL</button>
+        <!-- Need to program status adding functionality for button -->
+        <!-- Check in backend if user actually sent a link, even if checks are in front-end, user can modify .js files -->
+    </form>
+</div>
 {% endblock %}

@@ -2,38 +2,57 @@
 <html>
     <head>
         <title>JobApps - Job: Add</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='my_style.css') }}">
     </head>
     <body>
-        <p>JobApps - Add Job</p>
-        <a href="{{ url_for('job.index') }}">Back to Jobs List</a>
-        <form method="post">
-            <!-- Company name, job title, website link, status datetime, resume name, platform name -->
-            <label for="companyName">Company Name</label>
-            <input id="companyName" name="company" type="text">
-            <br>
+        <h1 style="text-align: center;">JobApps - Add Job</h1>
 
-            <label for="jobTitle">Job Title</label>
-            <input id="jobTitle" name="job" type="text">
-            <br>
+        <!-- back arrow would be nice -->
 
-            <label for="websiteLink">Website Link</label>
-            <input id="websiteLink" name="link" type="text">
-            <br>
+        <div class="create-form">
+            <div></div>
+            <div class="create-form-container">
+                <a href="{{ url_for('job.index') }}">Back to Jobs List</a>
 
-            <label for="appliedDatetime">Applied Datetime</label>
-            <input id="appliedDatetime" name="applied_time" type="datetime-local">
-            <br>
+                <form method="post" class="create-form-content">
+                    <!-- Company name, job title, website link, status datetime, resume name, platform name -->
+                    <div>
+                        <label for="companyName">Company Name</label>
+                        <input id="companyName" name="company" type="text">
+                    </div>
 
-            <label for="resumeName">Resume Name</label>
-            <input id="resumeName" name="resume" type="text">
-            <br>
+                    <div>
+                        <label for="jobTitle">Job Title</label>
+                        <input id="jobTitle" name="job" type="text">
+                    </div>
 
-            <label for="platformName">Platform Name</label>
-            <input id="platformName" name="platform" type="text">
-            <br>
+                    <div>
+                        <label for="websiteLink">Website Link</label>
+                        <input id="websiteLink" name="link" type="text">
+                    </div>
 
-            <input type="submit">
+                    <div>
+                        <label for="appliedDatetime">Applied Datetime</label>
+                        <input id="appliedDatetime" name="applied_time" type="datetime-local">
+                    </div>
 
-        </form>
+                    <div>
+                        <label for="resumeName">Resume Name</label>
+                        <input id="resumeName" name="resume" type="text">
+                    </div>
+
+                    <div>
+                        <label for="platformName">Platform Name</label>
+                        <input id="platformName" name="platform" type="text">
+                    </div>
+
+                    <div>
+                        <input type="submit">
+                    </div>
+
+                </form>
+            </div>
+            <div></div>
+        </div>
     </body>
 </html>
