@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html>
-<title>JobApps - {% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='my_style.css') }}">
-<nav>
-  <h1>JobApps</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><button><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
-    {% else %}
-      <li><button><a href="{{ url_for('auth.register') }}">Register</a></button>
-      <li><button><a href="{{ url_for('auth.login') }}">Log In</a></button>
-    {% endif %}
-  </ul>
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+  <head>
+    <title>JobApps - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='my_style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  </head>
+<body>
+  <nav>
+    <h1>JobApps</h1>
+    <ul>
+      {% if g.user %}
+        <li><span>{{ g.user['username'] }}</span>
+        <li><button><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
+      {% else %}
+        <li><button><a href="{{ url_for('auth.register') }}">Register</a></button>
+        <li><button><a href="{{ url_for('auth.login') }}">Log In</a></button>
+      {% endif %}
+    </ul>
+  </nav>
+  <section class="content">
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </section>
+</body>
 </html>

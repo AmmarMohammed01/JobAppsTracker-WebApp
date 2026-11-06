@@ -5,8 +5,15 @@
 {% block content %}
 <a href="{{ url_for('job.index') }}">Back to Jobs List</a>
 <div class="job-info-content">
-    <div class="job-info-title">{{ j.job_title or '-'}} &#183;</div>
-    <div class="job-info-company">{{ j.company_name or '-'}}</div>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <div class="job-info-title">{{ j.job_title or '-'}} &#183;</div>
+            <div class="job-info-company">{{ j.company_name or '-'}}</div>
+        </div>
+        <div>
+            <button onclick="deleteJob({{ j.job_id }})">Delete</button>
+        </div>
+    </div>
     
     <p class="job-info-extrainfo">Resume Used: {{ j.resume_name or '-'}}</p>
     <p class="job-info-extrainfo">Platform Applied On: {{ j.platform_name or '-'}}</p>
@@ -73,4 +80,19 @@
         <!-- Check in backend if user actually sent a link, even if checks are in front-end, user can modify .js files -->
     </form>
 </div>
+
+<script>
+  async function deleteJob(id) {
+    const response = await fetch(`/jobs/${id}`, {
+      method: "DELETE"
+    });
+
+    if (response.ok) {
+      window.location.href = "{{ url_for('job.index') }}";
+    } else {
+      alert("Could not delete the job.");
+    }
+  }
+</script>
+
 {% endblock %}

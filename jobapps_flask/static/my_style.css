@@ -179,13 +179,3 @@ input[type=submit] {
 .job-info-extrainfo {
     opacity: 60%;
 }
-
-@media (max-width: 1000px) {
-    nav {
-        font-size: 2rem;
-    }
-
-    table {
-        font-size: 1rem;
-    }
-}

@@ -259,12 +259,14 @@ def add_url(id):
         db.commit()
         return redirect(url_for('job.view', id=id))
 
-
-@bp.route('/<int:id>/delete', methods=('POST',))
+# is any user able to delete? only user creating the job should delete
+# currently when job is deleted, a bunch of information remains: url, resume, company
+@bp.route('/<int:id>', methods=('DELETE',))
 @login_required
 def delete(id):
     get_job(id)
     db = get_db()
-    db.execute('DELETE FROM job WHERE id = ?', (id,))
+    db.execute('DELETE FROM job WHERE job_id = ?', (id,))
     db.commit()
-    return redirect(url_for('job.index'))
+    # return redirect(url_for('job.index'))
+    return "", 204
