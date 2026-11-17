@@ -1,4 +1,22 @@
 # README
+
+## Instructions
+
+### First-Time Setup
+
+```bash
+python -m venv .venv
+pip install -r requirements.txt
+```
+
+### How to Run?
+
+```bash
+source .venv/bin/activate
+./run-web-app.sh
+```
+
+
 ## Tools Used
 [Deploying a Flask App to Production](https://flask.palletsprojects.com/en/stable/deploying/)
 
@@ -21,9 +39,3 @@
 
 - SQLite3
     - [Insert stmt](https://sqlite.org/lang_insert.html)
-
-## Instructions
-```bash
-python -m venv .venv
-pip install -r requirements.txt
-```

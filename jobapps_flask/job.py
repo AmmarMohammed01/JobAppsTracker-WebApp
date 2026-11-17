@@ -41,7 +41,26 @@ def index():
         ''',
         (g.user['id'],)
     ).fetchall() # could have also done ORDER BY MAX(s.status_datetime)
-    return render_template('job/view_all.html', jobs=jobs)
+
+    job_count_this_week = db.execute(
+        '''
+        SELECT count(S.job_id) as current_week_job_count
+        FROM status as S, job as J
+        WHERE
+            S.status_description = 'Applied'
+            AND
+            S.status_datetime >= date('now', 'weekday 0', '-7 days')
+            AND
+            S.status_datetime < date('now', 'weekday 0')
+            AND
+            S.job_id = J.job_id
+            AND
+            J.user_id = ?;
+        ''',
+        (g.user['id'],)
+    ).fetchone()
+
+    return render_template('job/view_all.html', jobs=jobs, job_count_this_week=job_count_this_week)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
